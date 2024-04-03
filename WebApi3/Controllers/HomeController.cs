@@ -51,7 +51,7 @@ namespace WebApi3.Controllers
                 client.BaseAddress = new Uri("http://localhost:11094/api/student");
 
                 //HTTP POST
-                var postTask = client.PostAsJsonAsync<Contact>("ontacts", contacts);
+                var postTask = client.PostAsJsonAsync<Contact>("Contacts", contacts);
                 postTask.Wait();
 
                 var result = postTask.Result;
@@ -62,6 +62,29 @@ namespace WebApi3.Controllers
             }
 
             ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+
+            return View(contacts);
+        }
+        public ActionResult Edit(int id)
+        {
+            Contact contacts = null;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:11094/api/");
+                //HTTP GET
+                var responseTask = client.GetAsync("contacts?id=" + id.ToString());
+                responseTask.Wait();
+
+                var result = responseTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    var readTask = result.Content.ReadAsAsync<Contact>();
+                    readTask.Wait();
+
+                    contacts = readTask.Result;
+                }
+            }
 
             return View(contacts);
         }
