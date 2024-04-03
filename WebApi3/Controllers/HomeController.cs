@@ -88,5 +88,26 @@ namespace WebApi3.Controllers
 
             return View(contacts);
         }
+        public ActionResult Delete(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:11094/api/");
+
+                //HTTP DELETE
+                var deleteTask = client.DeleteAsync("contacts/" + id.ToString());
+                deleteTask.Wait();
+
+                var result = deleteTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+
+                    return RedirectToAction("Index");
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
