@@ -272,6 +272,7 @@
       <DependentUpon>WebApiModel.edmx</DependentUpon>
     </Content>
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

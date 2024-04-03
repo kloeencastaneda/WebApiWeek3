@@ -39,5 +39,31 @@ namespace WebApi3.Controllers
             }
             return View(contacts);
         }
+        public ActionResult create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult create(Contact contacts)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:11094/api/student");
+
+                //HTTP POST
+                var postTask = client.PostAsJsonAsync<Contact>("ontacts", contacts);
+                postTask.Wait();
+
+                var result = postTask.Result;
+                if (result.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+
+            return View(contacts);
+        }
     }
 }
